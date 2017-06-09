@@ -1,11 +1,14 @@
 package bd2.Muber.services.impl;
 
 import bd2.Muber.dto.DTOFactory;
-import bd2.Muber.repositories.PasajerosRepositoryBI;
+import bd2.Muber.repositories.*;
 
 public class BaseServiceImpl
 {
 	public PasajerosRepositoryBI pasajerosRepository;
+	public ConductoresRepositoryBI conductoresRepository;
+	public ViajesRepositoryBI viajesRepository;
+
 	public DTOFactory dtoFactory;
 	
 	public DTOFactory getDtoFactory() {
@@ -23,6 +26,24 @@ public class BaseServiceImpl
 	public PasajerosRepositoryBI getPasajerosRepository(){
 		return pasajerosRepository;
 	}
+	
+	public void setConductoresRepository(ConductoresRepositoryBI repository){
+		conductoresRepository = repository;
+	}
+	
+	public ConductoresRepositoryBI getConductoresRepository(){
+		return conductoresRepository;
+	}
+	
+	public void setViajesRepository(ViajesRepositoryBI repository) {
+		viajesRepository = repository;
+	}
+	
+	public ViajesRepositoryBI getViajesRepository() {
+		return viajesRepository;
+	}
+
+
 	
 	
 }

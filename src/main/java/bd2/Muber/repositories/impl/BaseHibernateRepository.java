@@ -19,8 +19,6 @@ public class BaseHibernateRepository{
 	}
 	
 	public Session getSession() {
-		//Configuration cfg = new Configuration();
-		//cfg.configure("hibernate.cfg.xml");
 		SessionFactory factory = sessionFactory;
 		Session session = factory.openSession();
 		return session;

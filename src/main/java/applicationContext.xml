@@ -31,6 +31,20 @@
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
+	
+	<bean id="conductoresRepository"
+		class="bd2.Muber.repositories.impl.HibernateConductoresRepository">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+	<bean id="viajesRepository"
+		class="bd2.Muber.repositories.impl.HibernateViajesRepository">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
 
 	<bean id="dtoFactory" class="bd2.Muber.dto.DTOFactory">
 	</bean>
@@ -40,11 +54,25 @@
 		<property name="pasajerosRepository">
 			<ref bean="pasajerosRepository" />
 		</property>
+		
+		<property name="conductoresRepository">
+			<ref bean="conductoresRepository" />
+		</property>
+		
+		<property name="viajesRepository">
+			<ref bean="viajesRepository" />
+		</property>
 	</bean>
 
 	<bean id="baseService" class="bd2.Muber.services.impl.BaseServiceImpl">
 		<property name="pasajerosRepository">
 			<ref bean="pasajerosRepository" />
+		</property>
+		<property name="conductoresRepository">
+			<ref bean="conductoresRepository" />
+		</property>
+		<property name="viajesRepository">
+			<ref bean="viajesRepository" />
 		</property>
 		<property name="dtoFactory">
 			<ref bean="dtoFactory" />
@@ -52,6 +80,14 @@
 	</bean>
 
 	<bean id="pasajerosServiceTarget" class="bd2.Muber.services.impl.PasajerosServiceImpl"
+		parent="baseService">
+	</bean>
+	
+	<bean id="conductoresServiceTarget" class="bd2.Muber.services.impl.ConductoresServiceImpl"
+		parent="baseService">
+	</bean>
+	
+	<bean id="viajesServiceTarget" class="bd2.Muber.services.impl.ViajesServiceImpl"
 		parent="baseService">
 	</bean>
 
@@ -70,10 +106,49 @@
 		</property>
 	</bean>
 	
+	<bean id="conductoresService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="target">
+			<ref bean="conductoresServiceTarget" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="viajesService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="target">
+			<ref bean="viajesServiceTarget" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
 	<bean id="serviceLocator" class="bd2.Muber.services.ServiceLocator"
 		factory-method="getInstance">
+		
 		<property name="pasajerosService">
 			<ref bean="pasajerosService" />
+		</property>
+		
+		<property name="conductoresService">
+			<ref bean="conductoresService" />
+		</property>
+		
+		<property name="viajesService">
+			<ref bean="viajesService" />
 		</property>
 	</bean>
 

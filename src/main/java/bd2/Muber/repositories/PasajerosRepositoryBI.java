@@ -6,9 +6,8 @@ import bd2.Muber.dto.PasajeroDTO;
 
 public interface PasajerosRepositoryBI extends BaseRepositoryBI {
 	
-	public PasajeroDTO getPasajero(Integer id);
-	public List<PasajeroDTO> getPasajeros();
-	public String addPasajero(Integer viajeId, Integer pasajeroId);
-	public String addCredito(Integer pasajeroId, Double monto);
+	PasajeroDTO getPasajero(Integer id);
+	List<PasajeroDTO> getPasajeros();
+	void addCredito(Integer pasajeroId, Double monto);
 }
 

@@ -17,9 +17,13 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.google.gson.Gson;
 
+import bd2.Muber.dto.ConductorDTO;
 import bd2.Muber.dto.PasajeroDTO;
+import bd2.Muber.dto.ViajeDTO;
+import bd2.Muber.services.ConductoresServiceBI;
 import bd2.Muber.services.PasajerosServiceBI;
 import bd2.Muber.services.ServiceLocator;
+import bd2.Muber.services.ViajesServiceBI;
 
 
 @Controller
@@ -60,16 +64,16 @@ public class MuberRestController {
 		 */
 		Map<String, Object> mapAll = new LinkedHashMap<String, Object>();
 		Map<Integer, Object> mapConductores = new LinkedHashMap<Integer, Object>();
-		/*Map<String, Object> mapAtributos = new LinkedHashMap<String, Object>();
-		ConductorDAO dao = new ConductorDAO();
-		List <ConductorDTO> conductores =  dao.obtenerConductores();
+		Map<String, Object> mapAtributos = new LinkedHashMap<String, Object>();
+		ConductoresServiceBI service = ServiceLocator.getConductoresService();
+		List <ConductorDTO> conductores = service.getConductores(); 
 		for (ConductorDTO c : conductores) {
 			mapAtributos.put("nombre", c.getNombre());
 			mapAtributos.put("password", c.getPassword());
 			mapAtributos.put("fechaVencimientoLic", c.getFechaVencimientoLic());
 			mapAtributos.put("fechaIngreso", c.getFechaIngreso());
 			mapConductores.put(c.getIdUsuario(), new LinkedHashMap<String, Object>(mapAtributos));
-		}*/
+		}
 		mapAll.put("result", "OK");
 		mapAll.put("conductores", mapConductores);
 		return new Gson().toJson(mapAll);
@@ -84,9 +88,9 @@ public class MuberRestController {
 		
 		Map<String, Object> mapAll = new LinkedHashMap<String, Object>();
 		Map<Integer, Object> mapViajes = new LinkedHashMap<Integer, Object>();
-		/*Map<String, Object> mapAtributos = new LinkedHashMap<String, Object>();
-		ViajeDAO dao = new ViajeDAO();
-		List <ViajeDTO> viajes =  dao.obtenerViajes();
+		Map<String, Object> mapAtributos = new LinkedHashMap<String, Object>();
+		ViajesServiceBI service = ServiceLocator.getViajesService();
+		List <ViajeDTO> viajes = service.getViajes(); 
 		for (ViajeDTO v : viajes) {
 			if (v.isAbierto()){
 				mapAtributos.put("origen", v.getOrigen());
@@ -94,11 +98,11 @@ public class MuberRestController {
 				mapAtributos.put("costoTotal", v.getCostoTotal());
 				mapAtributos.put("fecha", v.getFecha());
 				mapAtributos.put("cantidadMaximaPasajeros", v.getCantidadMaximaPasajeros());
-				mapAtributos.put("idConductor", v.getConductor().getIdConductor());
+				mapAtributos.put("idConductor", v.getConductor().getIdUsuario() );
 				mapAtributos.put("nombreConductor", v.getConductor().getNombre());
 				mapViajes.put(v.getIdViaje(), new LinkedHashMap<String, Object>(mapAtributos));
 			}
-		}*/
+		}
 		mapAll.put("result", "OK");
 		mapAll.put("viajesAbiertos", mapViajes);
 		return new Gson().toJson(mapAll);
@@ -113,9 +117,9 @@ public class MuberRestController {
 		
 		Map<String, Object> aMap = new HashMap<String, Object>();
 		if ( (origen != null) & (destino != null) & (conductorId != null) & (costoTotal != null) & (cantidadPasajeros != null) ){
-			/*ViajeDAO dao = new ViajeDAO();
-			String resultado = dao.crearViaje(origen, destino, conductorId, costoTotal, cantidadPasajeros);
-			aMap.put("result", resultado);*/
+			ViajesServiceBI service = ServiceLocator.getViajesService();
+			String resultado = service.altaViaje(origen, destino, conductorId, costoTotal, cantidadPasajeros);
+			aMap.put("result", resultado);
 		}else{ 
 			aMap.put("result", "Error, parametros incorrectos");
 		}
@@ -129,10 +133,10 @@ public class MuberRestController {
 		 * curl http://localhost:8080/MuberRESTful/rest/services/conductores/detalle?conductorId=2
 		 */
 		Map<String, Object> mapAll = new LinkedHashMap<String, Object>();
-		/*Map<String, Object> mapConductor = new LinkedHashMap<String, Object>();
+		Map<String, Object> mapConductor = new LinkedHashMap<String, Object>();
 		if (conductorId != null){
-			ConductorDAO dao = new ConductorDAO();
-			ConductorDTO conductor = dao.obtenerConductor(conductorId);
+			ConductoresServiceBI service = ServiceLocator.getConductoresService();
+			ConductorDTO conductor = service.getConductor(conductorId); 
 			if (conductor != null){
 				mapConductor.put("idUsuario", conductor.getIdUsuario());
 				mapConductor.put("nombre", conductor.getNombre());
@@ -148,26 +152,24 @@ public class MuberRestController {
 		}else{
 			mapAll.put("result", "No se ingreso un parametro");
 		}
-		*/
 		return new Gson().toJson(mapAll);
 		
 	}
 	
 	
 	@RequestMapping(value = "/viajes/agregarPasajero", method = RequestMethod.PUT, produces = "application/json", headers = "Accept=application/json")
-	public String agregarPasajero(@RequestBody Map<String, Integer> params) {
-		
+	public String agregarPasajero(@RequestBody Map<String, Integer> params) {		
 		/*
 		 * Probado con Postman {"viajeId":1,"pasajeroId":3}
 		 */
 		Map<String, Object> aMap = new HashMap<String, Object>();
-		/*if ( (params.get("viajeId") != null) & (params.get("pasajeroId") != null) ){
-			PasajeroDAO dao = new PasajeroDAO();
-			String resultado = dao.addPasajero(params.get("viajeId"), params.get("pasajeroId"));
+		if ( (params.get("viajeId") != null) & (params.get("pasajeroId") != null) ){
+			ViajesServiceBI service = ServiceLocator.getViajesService();
+			String resultado = service.addPasajero(params.get("viajeId"), params.get("pasajeroId"));
 			aMap.put("Result", resultado);
 		}else{
 			aMap.put("result", "Error, parametros incorrectos");
-		}*/
+		}
 		return new Gson().toJson(aMap);
 	}
 	
@@ -178,11 +180,11 @@ public class MuberRestController {
 		 * curl -X POST -d "viajeId=1&pasajeroId=1&puntaje=4&comentario=Conductor agradable" "http://localhost:8080/MuberRESTful/rest/services/viajes/calificar"
 		 */
 		Map<String, Object> aMap = new HashMap<String, Object>();
-		/*if ( (viajeId != null) & (pasajeroId != null) & (puntaje != null) & (comentario != null)){
-			ViajeDAO dao = new ViajeDAO();
-			String resultado = dao.calificarViaje(viajeId, pasajeroId, puntaje, comentario);
+		if ( (viajeId != null) & (pasajeroId != null) & (puntaje != null) & (comentario != null)){
+			ViajesServiceBI service = ServiceLocator.getViajesService();
+			String resultado = service.calificarViaje(viajeId, pasajeroId, puntaje, comentario);
 			aMap.put("result", resultado);
-		}else*/ 
+		}else
 			aMap.put("result", "Error, parametros incorrectos");
 		return new Gson().toJson(aMap);
 	}
@@ -196,9 +198,9 @@ public class MuberRestController {
 		
 		Map<String, Object> mapAll = new LinkedHashMap<String, Object>();
 		Map<Integer, Object> mapConductores = new LinkedHashMap<Integer, Object>();
-		/*Map<String, Object> mapAtributos = new LinkedHashMap<String, Object>();
-		ConductorDAO dao = new ConductorDAO();
-		List <ConductorDTO> conductores =  dao.obtenerTop10();
+		Map<String, Object> mapAtributos = new LinkedHashMap<String, Object>();
+		ConductoresServiceBI service = ServiceLocator.getConductoresService();
+		List <ConductorDTO> conductores =  service.obtenerTop10();
 		for (ConductorDTO c : conductores) {
 			mapAtributos.put("nombre", c.getNombre());
 			mapAtributos.put("password", c.getPassword());
@@ -206,7 +208,7 @@ public class MuberRestController {
 			mapAtributos.put("fechaIngreso", c.getFechaIngreso());
 			mapAtributos.put("puntajePromedio", Double.toString(c.getPuntajePromedio()));
 			mapConductores.put(c.getIdUsuario(), new LinkedHashMap<String, Object>(mapAtributos));
-		}*/
+		}
 		mapAll.put("result", "OK");
 		mapAll.put("conductores", mapConductores);
 		return new Gson().toJson(mapAll);
@@ -217,18 +219,19 @@ public class MuberRestController {
 		/*
 		 * Probado con Postman {"pasajeroId":1,"monto":200}
 		 */
-		/*Double aux = (Double) params.get("pasajeroId");
+		
+		Double aux = (Double) params.get("pasajeroId");
 		Integer pasajeroId =  aux.intValue();
 		Double monto = (Double) params.get("monto");
 		Map<String, Object> aMap = new HashMap<String, Object>();
 		if  ((pasajeroId != null) && (monto != null)) {
-			PasajeroDAO dao = new PasajeroDAO();
-			String resultado = dao.addCredito(pasajeroId, monto);
+			PasajerosServiceBI service = ServiceLocator.getPasajerosService(); 
+			String resultado = service.addCredito(pasajeroId, monto);
 			aMap.put("result", resultado);
 		}else{
 			aMap.put("result", "Error parametros incorrectos");
-		}*/
-		return new Gson().toJson("ok");
+		}
+		return new Gson().toJson(aMap);
 	}
 	
 	@RequestMapping(value = "/viajes/finalizar", method = RequestMethod.PUT, produces = "application/json", headers = "Accept=application/json")
@@ -237,16 +240,16 @@ public class MuberRestController {
 		 * Probado con Postman {"viajeId":1}
 		 */
 		Map<String, Object> aMap = new HashMap<String, Object>();
-		/*if  (params.get("viajeId") != null) {
-			ViajeDAO dao = new ViajeDAO();
-			if (dao.finalizarViaje(params.get("viajeId"))){
+		if  (params.get("viajeId") != null) {
+			ViajesServiceBI service = ServiceLocator.getViajesService();
+			if (service.finalizarViaje(params.get("viajeId"))){
 				aMap.put("Result", "Viaje Fianlizado");
 			}else{
 				aMap.put("Result", "Error, no existe viaje abierto con el id ingresado");
 			}
 		}else{
 			aMap.put("Result", "Error parametro incorrecto");
-		}*/
+		}
 		return new Gson().toJson(aMap);
 	}
 }

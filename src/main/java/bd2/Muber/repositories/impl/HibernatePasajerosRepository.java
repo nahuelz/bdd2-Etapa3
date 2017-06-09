@@ -24,7 +24,10 @@ public class HibernatePasajerosRepository extends BaseHibernateRepository implem
 		Query query =session.createQuery("from Pasajero WHERE id_usuario = :id");
 		query.setParameter("id", id);
 		Pasajero pasajero = (Pasajero) query.uniqueResult();
-		PasajeroDTO pasajeroDTO = new PasajeroDTO(pasajero);
+		PasajeroDTO pasajeroDTO = new PasajeroDTO();
+		if (pasajero != null){
+			pasajeroDTO = new PasajeroDTO(pasajero);
+		}
 		tx.rollback();
 		session.disconnect();
 		session.close();
@@ -45,47 +48,20 @@ public class HibernatePasajerosRepository extends BaseHibernateRepository implem
 		session.close();		
 		return pasajerosDTO;
 	}
+
 	
-	public String addPasajero(Integer viajeId, Integer pasajeroId){
+	public void addCredito(Integer pasajeroId, Double monto){
 		Session session = this.getSession();
 		Transaction tx = session.beginTransaction();
-		Viaje viaje = (Viaje) session.get(Viaje.class, viajeId);
-		Pasajero pasajero = (Pasajero) session.get(Pasajero.class, pasajeroId);
-		String resultado;
-		if (viaje != null){
-			if (pasajero != null){
-				if (viaje.addPasajero(pasajero)){
-					tx.commit();
-					resultado = "pasajero agregado";
-				}else{
-					resultado = "No se pudo agregar el pasajero";
-				}
-			}else{
-				resultado = "No se encontro pasajero con el id ingresado";
-			}
-		}else{
-			resultado = "No se encontro viaje con el id ingresado";			
-		}
+
+		Query query =session.createQuery("from Pasajero WHERE id_usuario = :pasajeroId");
+		query.setParameter("pasajeroId", pasajeroId);
+		Pasajero pasajero = (Pasajero) query.uniqueResult();
+		
+		pasajero.cargarCredito(monto);
+		tx.commit();
 		session.disconnect();
 		session.close();
-		return resultado;
-	}
-	
-	public String addCredito(Integer pasajeroId, Double monto){
-		Session session = this.getSession();
-		Transaction tx = session.beginTransaction();
-		Pasajero pasajero = (Pasajero) session.get(Pasajero.class, pasajeroId);
-		String resultado;
-		if (pasajero != null){
-			resultado = "Credito agregado";
-			pasajero.cargarCredito(monto);
-			tx.commit();
-		}else{
-			resultado = "El ID ingresado no corresponde a un pasajero";
-		}
-		session.disconnect();
-		session.close();
-		return resultado;
 	}
 
 	
