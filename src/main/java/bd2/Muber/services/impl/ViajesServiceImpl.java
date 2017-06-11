@@ -35,7 +35,7 @@ public class ViajesServiceImpl extends BaseServiceImpl implements ViajesServiceB
 				viajesRepository.altaViaje(origen, destino, conductorId, costoTotal, cantidadPasajeros);
 				return "Viaje creado";
 			}else{
-				return "El conductor posee la lisencia vencida";
+				return "El conductor posee la licencia vencida";
 			}
 		}else{
 			return "No se encontro conductor con el Id ingresado";

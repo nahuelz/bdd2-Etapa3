@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.google.gson.Gson;
@@ -127,10 +128,10 @@ public class MuberRestController {
 	}
 	
 	
-	@RequestMapping(value = "/conductores/detalle", method = RequestMethod.GET, produces = "application/json", headers = "Accept=application/json")
-	public String detalle(Integer conductorId) {
+	@RequestMapping(value = "/conductores/detalle/{conductorId}", method = RequestMethod.GET, produces = "application/json", headers = "Accept=application/json")
+	public String detalle(@PathVariable Integer conductorId) {
 		/*
-		 * curl http://localhost:8080/MuberRESTful/rest/services/conductores/detalle?conductorId=2
+		 * curl http://localhost:8080/MuberRESTful/rest/services/conductores/detalle/2
 		 */
 		Map<String, Object> mapAll = new LinkedHashMap<String, Object>();
 		Map<String, Object> mapConductor = new LinkedHashMap<String, Object>();
@@ -140,9 +141,8 @@ public class MuberRestController {
 			if (conductor != null){
 				mapConductor.put("idUsuario", conductor.getIdUsuario());
 				mapConductor.put("nombre", conductor.getNombre());
-				mapConductor.put("password", conductor.getPassword());
 				mapConductor.put("fechaVencimientoLic", conductor.getFechaVencimientoLic());
-				mapConductor.put("fechaIngreso", conductor.getFechaIngreso());
+				mapConductor.put("puntajePromedio", Double.toString(conductor.getPuntajePromedio()));
 	
 				mapAll.put("result", "OK");
 				mapAll.put("conductor", mapConductor);
