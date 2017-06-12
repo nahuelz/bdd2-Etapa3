@@ -51,7 +51,7 @@ public class DTOFactory {
 		List<ConductorDTO> conductoresDTO = new ArrayList<ConductorDTO>();
 		for (Conductor c : conductores) {
 			ConductorDTO con = new ConductorDTO(c);
-			con.setPuntajePromedio(c.puntajePromedio());
+			//con.setPuntajePromedio(c.puntajePromedio());
 			conductoresDTO.add(con);
 		}
 		return conductoresDTO;

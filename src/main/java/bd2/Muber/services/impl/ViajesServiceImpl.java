@@ -8,6 +8,7 @@ import bd2.Muber.dto.ComentarioDTO;
 import bd2.Muber.dto.ConductorDTO;
 import bd2.Muber.dto.PasajeroDTO;
 import bd2.Muber.dto.ViajeDTO;
+
 import bd2.Muber.services.ConductoresServiceBI;
 import bd2.Muber.services.PasajerosServiceBI;
 import bd2.Muber.services.ServiceLocator;
@@ -30,7 +31,8 @@ public class ViajesServiceImpl extends BaseServiceImpl implements ViajesServiceB
 	{
 		ConductoresServiceBI service = ServiceLocator.getConductoresService();
 		ConductorDTO conductor = service.getConductor(conductorId); 
-		if (conductor != null){
+		// id = 0 significa que no se encontro el usuario
+		if (conductor.getIdUsuario() != 0){
 			if (conductor.getFechaVencimientoLic().after(new Date())) {
 				viajesRepository.altaViaje(origen, destino, conductorId, costoTotal, cantidadPasajeros);
 				return "Viaje creado";
@@ -77,16 +79,8 @@ public class ViajesServiceImpl extends BaseServiceImpl implements ViajesServiceB
 		if ( viaje.getIdViaje() != 0){
 			if (!viaje.isAbierto()){
 				if (pasajero.getIdUsuario() != 0 ){
-					if (this.isPasajero(viaje, pasajero)){
-						if (!this.calificoViaje(viaje, pasajero)){
-							viajesRepository.calificarViaje(viajeId, pasajeroId, puntaje, comentario);
-							return "Viaje calificado";
-						}else{
-							return "El pasajero ya realizo su calificacion en este viaje";
-						}
-					}else{
-						return "El pasajero no fue pasajero (valga la redundacia) del viaje ingresado";
-					}
+					viajesRepository.calificarViaje(viajeId, pasajeroId, puntaje, comentario);
+					return "Viaje calificado";
 				}else{
 					return "El Id ingresado no corresponde a un pasajero";
 				}
@@ -98,25 +92,7 @@ public class ViajesServiceImpl extends BaseServiceImpl implements ViajesServiceB
 		}
 	}
 
-	private boolean isPasajero(ViajeDTO viaje, PasajeroDTO pasajero) {
-		Set<PasajeroDTO> pasajeros = viaje.getPasajeros();
-		for (PasajeroDTO p : pasajeros) {
-			 if ( p.getIdUsuario() == (pasajero.getIdUsuario())){
-				 return true;
-			 }
-		 }
-		 return false;
-	}
 	
-	private boolean calificoViaje(ViajeDTO viaje, PasajeroDTO pasajero) {
-		Set<ComentarioDTO> comentarios = viaje.getComentarios();
-		for (ComentarioDTO c : comentarios) {
-			if (c.getPasajero().getIdUsuario() == pasajero.getIdUsuario()){ 
-				return true;
-			}
-		}
-		return false;
-	}
 
 	@Override
 	public boolean finalizarViaje(Integer viajeId) {

@@ -84,7 +84,7 @@ public class MuberRestController {
 	@RequestMapping(value = "/viajes/abiertos", method = RequestMethod.GET, produces = "application/json", headers = "Accept=application/json")
 	public String viajesAbiertos() {
 		/*
-		 * curl http://localhost:8080/MuberRESTful/rest/services/abiertos
+		 * curl http://localhost:8080/MuberRESTful/rest/services/viajes/abiertos
 		 */
 		
 		Map<String, Object> mapAll = new LinkedHashMap<String, Object>();
@@ -92,15 +92,13 @@ public class MuberRestController {
 		Map<String, Object> mapAtributos = new LinkedHashMap<String, Object>();
 		ViajesServiceBI service = ServiceLocator.getViajesService();
 		List <ViajeDTO> viajes = service.getViajes(); 
-		for (ViajeDTO v : viajes) {
+		for (ViajeDTO v : viajes){
 			if (v.isAbierto()){
 				mapAtributos.put("origen", v.getOrigen());
 				mapAtributos.put("destino", v.getDestino());
 				mapAtributos.put("costoTotal", v.getCostoTotal());
 				mapAtributos.put("fecha", v.getFecha());
 				mapAtributos.put("cantidadMaximaPasajeros", v.getCantidadMaximaPasajeros());
-				mapAtributos.put("idConductor", v.getConductor().getIdUsuario() );
-				mapAtributos.put("nombreConductor", v.getConductor().getNombre());
 				mapViajes.put(v.getIdViaje(), new LinkedHashMap<String, Object>(mapAtributos));
 			}
 		}
@@ -142,7 +140,6 @@ public class MuberRestController {
 				mapConductor.put("idUsuario", conductor.getIdUsuario());
 				mapConductor.put("nombre", conductor.getNombre());
 				mapConductor.put("fechaVencimientoLic", conductor.getFechaVencimientoLic());
-				mapConductor.put("puntajePromedio", Double.toString(conductor.getPuntajePromedio()));
 	
 				mapAll.put("result", "OK");
 				mapAll.put("conductor", mapConductor);

@@ -6,6 +6,7 @@ public class Conductor extends Usuario {
 	
 	private int idConductor;
 	private Date fechaVencimientoLic;
+	private float puntajePromedio;
 	
 	public Conductor(){
 		super();
@@ -38,6 +39,14 @@ public class Conductor extends Usuario {
 
 	public boolean isConductor() {
 		return true;
+	}
+	
+	public void setPuntajePromedio (float promedio){
+		this.puntajePromedio = promedio;
+	}
+	
+	public float getPuntajePromedio (){
+		return puntajePromedio;
 	}
 	
 	public Float puntajePromedio() {
