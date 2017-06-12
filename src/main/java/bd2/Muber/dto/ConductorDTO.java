@@ -25,6 +25,7 @@ public class ConductorDTO extends UsuarioDTO  {
 		this.setNombre(c.getNombre());
 		this.setPassword(c.getPassword());
 		this.setIdConductor(c.getIdConductor());
+		this.setPuntajePromedio(c.getPuntajePromedio());
 	}
 
 	public Date getFechaVencimientoLic() {

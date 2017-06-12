@@ -45,22 +45,27 @@ public class Conductor extends Usuario {
 		this.puntajePromedio = promedio;
 	}
 	
-	public float getPuntajePromedio (){
+	public Float getPuntajePromedio (){
 		return puntajePromedio;
 	}
 	
 	public Float puntajePromedio() {
-		if (this.getViajes().isEmpty()) return (float) 0;
-		float promedio = 0;
-		int cantViajes = 0;
-		Set<Viaje> viajes = this.getViajes();
-		for (Viaje viaje : viajes ) {
-			if (viaje.getComentarios().size() != 0){
-				cantViajes ++;
-				promedio = promedio + viaje.puntajePromedio();
+		if (this.getViajes().isEmpty()){
+			this.setPuntajePromedio(0);
+			return (float) 0;
+		}else{
+			float promedio = 0;
+			int cantViajes = 0;
+			Set<Viaje> viajes = this.getViajes();
+			for (Viaje viaje : viajes ) {
+				if (viaje.getComentarios().size() != 0){
+					cantViajes ++;
+					promedio = promedio + viaje.puntajePromedio();
+				}
 			}
+			this.setPuntajePromedio(promedio/cantViajes);
+			return promedio/cantViajes;
 		}
-		return promedio/cantViajes;
 	}
 
 }

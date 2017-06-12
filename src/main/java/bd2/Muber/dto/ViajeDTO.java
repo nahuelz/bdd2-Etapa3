@@ -14,7 +14,7 @@ public class ViajeDTO {
 	private int costoTotal;
 	private Date fecha;
 	private int cantidadMaximaPasajeros;
-	private Conductor conductor;
+	private ConductorDTO conductor;
 	private char estado;
 
 	public ViajeDTO() {
@@ -29,7 +29,7 @@ public class ViajeDTO {
 			this.setCantidadMaximaPasajeros(pasajeros);
 			this.setFecha(fecha);
 			this.setCostoTotal(costoTotal);
-			this.setConductor(conductor);
+			this.setConductor(new ConductorDTO(conductor));
 		}
 	}
 	
@@ -40,8 +40,7 @@ public class ViajeDTO {
 		this.setCostoTotal(v.getCostoTotal());
 		this.setEstado(v.getEstado());
 		this.setFecha(v.getFecha());
-		this.setCantidadMaximaPasajeros(v.getCantidadMaximaPasajeros());
-		this.setConductor(v.getConductor());	
+		this.setCantidadMaximaPasajeros(v.getCantidadMaximaPasajeros());	
 	}
 
 	public int getIdViaje() {
@@ -81,11 +80,11 @@ public class ViajeDTO {
 		this.cantidadMaximaPasajeros = cantidadMaximaPasajeros;
 	}
 	
-	public Conductor getConductor() {
+	public ConductorDTO getConductor() {
 		return conductor;
 	}
 
-	public void setConductor(Conductor conductor) {
+	public void setConductor(ConductorDTO conductor) {
 		this.conductor = conductor;
 	}
 	

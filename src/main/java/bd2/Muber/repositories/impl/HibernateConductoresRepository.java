@@ -37,7 +37,10 @@ public class HibernateConductoresRepository extends BaseHibernateRepository impl
 		Session session = this.getSession();
 		Transaction tx = session.beginTransaction();
 		List<Conductor> conductores = session.createQuery("from Conductor c where c not in (select v.Conductor from Viaje v where v.estado = 'A')").list();
-		conductores.sort((c1, c2) -> c2.puntajePromedio().compareTo(c1.puntajePromedio()));
+		for (Conductor c : conductores){
+			c.puntajePromedio();
+		}
+		conductores.sort((c1, c2) -> c2.getPuntajePromedio().compareTo(c1.getPuntajePromedio()));
 		conductores = conductores.subList(0, Integer.min(conductores.size(), 10));
 		tx.rollback();
 		session.disconnect();
