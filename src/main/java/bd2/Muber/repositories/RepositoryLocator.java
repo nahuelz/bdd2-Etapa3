@@ -5,9 +5,13 @@ public class RepositoryLocator {
 	static PasajerosRepositoryBI pasajerosRepository;
 	static ConductoresRepositoryBI conductoresRepository;
 	static ViajesRepositoryBI viajesRepository;
+	private static RepositoryLocator instance;
 	
     public static RepositoryLocator getInstance() {
-        return new RepositoryLocator();
+    	if (instance == null){
+    		instance = new RepositoryLocator();
+    	}
+		return instance;
     }
     
     public static void setPasajerosRepository(PasajerosRepositoryBI repository){

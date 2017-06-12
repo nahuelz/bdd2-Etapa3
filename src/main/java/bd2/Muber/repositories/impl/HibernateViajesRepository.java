@@ -1,16 +1,12 @@
 package bd2.Muber.repositories.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import bd2.Muber.dto.ConductorDTO;
-import bd2.Muber.dto.ViajeDTO;
 import bd2.Muber.model.*;
 import bd2.Muber.repositories.ViajesRepositoryBI;
 
@@ -21,19 +17,14 @@ public class HibernateViajesRepository extends BaseHibernateRepository implement
 	}
 	
 	@Override
-	public List<ViajeDTO> getViajes() {
+	public List<Viaje> getViajes() {
 		Session session = this.getSession();
 		Transaction tx = session.beginTransaction();
 		List<Viaje> viajes = session.createQuery("from Viaje").list();
-		List<ViajeDTO> viajesDTO = new ArrayList<ViajeDTO>();
-		for (Viaje v : viajes) {
-			ViajeDTO viaje = new ViajeDTO(v);
-			viajesDTO.add(viaje);
-		}
 		tx.rollback();
 		session.disconnect();
 		session.close();		
-		return viajesDTO;
+		return viajes;
 
 	}
 
@@ -56,20 +47,16 @@ public class HibernateViajesRepository extends BaseHibernateRepository implement
 	}
 
 	@Override
-	public ViajeDTO getViaje(Integer viajeId) {
+	public Viaje getViaje(Integer viajeId) {
 		Session session = this.getSession();
 		Transaction tx = session.beginTransaction();
 		Query query =session.createQuery("from Viaje WHERE id = :viajeId");
 		query.setParameter("viajeId", viajeId);
 		Viaje viaje = (Viaje) query.uniqueResult();
-		ViajeDTO viajeDTO = new ViajeDTO();
-		if (viaje != null){
-			viajeDTO = new ViajeDTO(viaje);
-		}
 		tx.rollback();
 		session.disconnect();
 		session.close();
-		return viajeDTO;
+		return viaje;
 	}
 
 	@Override

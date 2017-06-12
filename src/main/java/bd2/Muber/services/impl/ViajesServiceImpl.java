@@ -18,11 +18,11 @@ public class ViajesServiceImpl extends BaseServiceImpl implements ViajesServiceB
 	
 	public List<ViajeDTO> getViajes(){
 		
-		return viajesRepository.getViajes();
+		return this.dtoFactory.getViajes(viajesRepository.getViajes());
 	}
 	
 	public ViajeDTO getViaje(Integer viajeId){
-		return viajesRepository.getViaje(viajeId);
+		return this.dtoFactory.getViaje(viajesRepository.getViaje(viajeId));
 	}
 
 	@Override

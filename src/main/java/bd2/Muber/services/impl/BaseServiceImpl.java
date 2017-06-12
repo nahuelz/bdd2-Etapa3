@@ -8,7 +8,6 @@ public class BaseServiceImpl
 	public PasajerosRepositoryBI pasajerosRepository;
 	public ConductoresRepositoryBI conductoresRepository;
 	public ViajesRepositoryBI viajesRepository;
-
 	public DTOFactory dtoFactory;
 	
 	public DTOFactory getDtoFactory() {

@@ -1,12 +1,17 @@
 package bd2.Muber.services;
 
 public class ServiceLocator {
+	
+	private static ServiceLocator instance;
 	static PasajerosServiceBI pasajerosService;
 	static ConductoresServiceBI conductoresService;
 	static ViajesServiceBI viajesService;
 	
     public static ServiceLocator getInstance() {
-        return new ServiceLocator();
+    	if (instance == null){
+    		instance = new ServiceLocator();
+    	}
+		return instance;
     }
     
 	public static void setPasajerosService(PasajerosServiceBI pasajerosService) {

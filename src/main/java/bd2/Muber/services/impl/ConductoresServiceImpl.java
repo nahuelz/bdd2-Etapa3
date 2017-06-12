@@ -9,16 +9,16 @@ public class ConductoresServiceImpl extends BaseServiceImpl implements Conductor
 {
 
 	public List<ConductorDTO> getConductores() {
-		return conductoresRepository.getConductores();
+		return this.dtoFactory.getConductores(conductoresRepository.getConductores());
 	}
 
 	@Override
 	public ConductorDTO getConductor(Integer conductorId) {
-		return conductoresRepository.getConductor(conductorId);
+		return this.dtoFactory.getConductor(conductoresRepository.getConductor(conductorId));
 	}
 
 	@Override
 	public List<ConductorDTO> obtenerTop10() {
-		return conductoresRepository.obtenerTop10();
+		return this.dtoFactory.obtenerTop10(conductoresRepository.obtenerTop10());
 	}
 }

@@ -7,20 +7,20 @@ import bd2.Muber.services.PasajerosServiceBI;
 
 public class PasajerosServiceImpl extends BaseServiceImpl implements PasajerosServiceBI
 {
-	
-	public List<PasajeroDTO> getPasajeros(){
-		
-		return pasajerosRepository.getPasajeros();
+	 
+	public List<PasajeroDTO> getPasajeros(){ 
+		return this.dtoFactory.getPasajeros(pasajerosRepository.getPasajeros());
 	}
 
 	@Override
 	public PasajeroDTO getPasajero(Integer pasajeroId) {
-		return pasajerosRepository.getPasajero(pasajeroId);
+		return this.dtoFactory.getPasajero(pasajerosRepository.getPasajero(pasajeroId));
 	}
 
 	@Override
 	public String addCredito(Integer pasajeroId, Double monto) {
 		PasajeroDTO pasajero = this.getPasajero(pasajeroId);
+		// Si el id es 0 significa que no se encontro el pasajero
 		if (pasajero.getIdUsuario() != 0){
 			if (monto > 0){
 				pasajerosRepository.addCredito(pasajeroId, monto);
