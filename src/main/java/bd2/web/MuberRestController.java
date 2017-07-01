@@ -92,8 +92,10 @@ public class MuberRestController {
 		Map<String, Object> mapAtributos = new LinkedHashMap<String, Object>();
 		ViajesServiceBI service = ServiceLocator.getViajesService();
 		List <ViajeDTO> viajes = service.getViajes(); 
+		boolean hayViajes = false;
 		for (ViajeDTO v : viajes){
 			if (v.isAbierto()){
+				hayViajes = true;
 				mapAtributos.put("origen", v.getOrigen());
 				mapAtributos.put("destino", v.getDestino());
 				mapAtributos.put("costoTotal", v.getCostoTotal());
@@ -102,8 +104,12 @@ public class MuberRestController {
 				mapViajes.put(v.getIdViaje(), new LinkedHashMap<String, Object>(mapAtributos));
 			}
 		}
-		mapAll.put("result", "OK");
-		mapAll.put("viajesAbiertos", mapViajes);
+		if (hayViajes){
+			mapAll.put("result", "OK");
+			mapAll.put("viajesAbiertos", mapViajes);
+		}else{
+			mapAll.put("result", "No se encontraron viajes abiertos");
+		}
 		return new Gson().toJson(mapAll);
 		
 	}
@@ -115,10 +121,14 @@ public class MuberRestController {
 		 */
 		
 		Map<String, Object> aMap = new HashMap<String, Object>();
-		if ( (origen != null) & (destino != null) & (conductorId != null) & (costoTotal != null) & (cantidadPasajeros != null) ){
-			ViajesServiceBI service = ServiceLocator.getViajesService();
-			String resultado = service.altaViaje(origen, destino, conductorId, costoTotal, cantidadPasajeros);
-			aMap.put("result", resultado);
+		if ( (origen != null) & (destino != null) & (conductorId != null) & (costoTotal != null) & (cantidadPasajeros != null) ) {
+			if ( (!origen.isEmpty()) & (!destino.isEmpty()) & (!(conductorId == 0)) & (!(costoTotal == 0)) & (!(cantidadPasajeros == 0)) ){
+				ViajesServiceBI service = ServiceLocator.getViajesService();
+				String resultado = service.altaViaje(origen, destino, conductorId, costoTotal, cantidadPasajeros);
+				aMap.put("result", resultado);
+			}else{
+				aMap.put("result", "Error, parametros incorrectos");
+			}
 		}else{ 
 			aMap.put("result", "Error, parametros incorrectos");
 		}
