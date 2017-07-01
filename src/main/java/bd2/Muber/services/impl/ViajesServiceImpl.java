@@ -2,9 +2,7 @@ package bd2.Muber.services.impl;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
-import bd2.Muber.dto.ComentarioDTO;
 import bd2.Muber.dto.ConductorDTO;
 import bd2.Muber.dto.PasajeroDTO;
 import bd2.Muber.dto.ViajeDTO;
@@ -79,8 +77,17 @@ public class ViajesServiceImpl extends BaseServiceImpl implements ViajesServiceB
 		if ( viaje.getIdViaje() != 0){
 			if (!viaje.isAbierto()){
 				if (pasajero.getIdUsuario() != 0 ){
-					viajesRepository.calificarViaje(viajeId, pasajeroId, puntaje, comentario);
-					return "Viaje calificado";
+					if (viajesRepository.fuePasajero(pasajeroId, viajeId)){
+						if (!viajesRepository.calificoViaje(pasajeroId, viajeId)){
+							viajesRepository.calificarViaje(viajeId, pasajeroId, puntaje, comentario);
+							return "Viaje calificado";
+						}else{
+							return "El pasajero ya califico este viaje";
+						}
+					}else{
+						return "El usuario no fue pasajero del viaje ingresado";
+					}
+					
 				}else{
 					return "El Id ingresado no corresponde a un pasajero";
 				}

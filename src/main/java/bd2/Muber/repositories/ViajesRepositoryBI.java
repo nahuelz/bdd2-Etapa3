@@ -12,6 +12,9 @@ public interface ViajesRepositoryBI extends BaseRepositoryBI {
 	String addPasajero(Integer viajeId, Integer pasajeroId);
 	void calificarViaje(Integer viajeId, Integer pasajeroId, Integer puntaje, String comentario);
 	void finalizarViaje(Integer viajeId);
+	List<Viaje> getViajesConductor(Integer conductorId);
+	boolean fuePasajero(Integer pasajeroId, Integer viajeId);
+	boolean calificoViaje(Integer pasajeroId, Integer viajeId);
 	
 }
 

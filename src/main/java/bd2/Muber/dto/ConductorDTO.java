@@ -1,5 +1,8 @@
 package bd2.Muber.dto;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 import bd2.Muber.model.Conductor;
 
@@ -8,6 +11,7 @@ public class ConductorDTO extends UsuarioDTO  {
 	private int idConductor;
 	private Date fechaVencimientoLic;
 	private double puntajePromedio;
+	private Set<ViajeDTO> viajes;
 
 	public ConductorDTO(){
 		super();
@@ -58,6 +62,14 @@ public class ConductorDTO extends UsuarioDTO  {
 
 	public void setPuntajePromedio(double puntajePromedio) {
 		this.puntajePromedio = puntajePromedio;
+	}
+
+	public Set<ViajeDTO> getViajes() {
+		return viajes;
+	}
+
+	public void setViajes(Set<ViajeDTO> viajes) {
+		this.viajes = viajes;
 	}
 
 }

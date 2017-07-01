@@ -14,7 +14,7 @@ public class ConductoresServiceImpl extends BaseServiceImpl implements Conductor
 
 	@Override
 	public ConductorDTO getConductor(Integer conductorId) {
-		return this.dtoFactory.getConductor(conductoresRepository.getConductor(conductorId));
+		return this.dtoFactory.getConductor(conductoresRepository.getConductor(conductorId),viajesRepository.getViajesConductor(conductorId));
 	}
 
 	@Override

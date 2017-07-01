@@ -132,15 +132,23 @@ public class MuberRestController {
 		 * curl http://localhost:8080/MuberRESTful/rest/services/conductores/detalle/2
 		 */
 		Map<String, Object> mapAll = new LinkedHashMap<String, Object>();
-		Map<String, Object> mapConductor = new LinkedHashMap<String, Object>();
+		Map<Object, Object> mapConductor = new LinkedHashMap<Object, Object>();
+		Map<String, Object> mapViajes = new LinkedHashMap<String, Object>();
 		if (conductorId != null){
 			ConductoresServiceBI service = ServiceLocator.getConductoresService();
 			ConductorDTO conductor = service.getConductor(conductorId); 
-			if (conductor != null){
+			if (conductor.getIdUsuario() != 0){
 				mapConductor.put("idUsuario", conductor.getIdUsuario());
 				mapConductor.put("nombre", conductor.getNombre());
 				mapConductor.put("fechaVencimientoLic", conductor.getFechaVencimientoLic());
-	
+				mapConductor.put("Puntaje promedio", conductor.getPuntajePromedio());
+				for (ViajeDTO v : conductor.getViajes()){
+					mapViajes.put("Id", v.getIdViaje());
+					mapViajes.put("origen", v.getOrigen());
+					mapViajes.put("Destino", v.getDestino());
+					mapViajes.put("Estado", v.getEstado());
+					mapConductor.put(v.getIdViaje(), new LinkedHashMap<String, Object>(mapViajes));
+				}
 				mapAll.put("result", "OK");
 				mapAll.put("conductor", mapConductor);
 			}else{
@@ -149,10 +157,8 @@ public class MuberRestController {
 		}else{
 			mapAll.put("result", "No se ingreso un parametro");
 		}
-		return new Gson().toJson(mapAll);
-		
+		return new Gson().toJson(mapAll);	
 	}
-	
 	
 	@RequestMapping(value = "/viajes/agregarPasajero", method = RequestMethod.PUT, produces = "application/json", headers = "Accept=application/json")
 	public String agregarPasajero(@RequestBody Map<String, Integer> params) {		

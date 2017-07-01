@@ -1,13 +1,18 @@
 package bd2.Muber.dto;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import bd2.Muber.model.Viaje;
 
 public abstract class UsuarioDTO {
 	private int idUsuario;
 	private String nombre;
 	private String password;
 	private Date fechaIngreso;
-	
+
 	public UsuarioDTO (String nombre, String password, Date fecha){
 		this();
 		this.setNombre(nombre);
