@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import bd2.Muber.model.*;
 import bd2.Muber.repositories.ViajesRepositoryBI;
@@ -29,14 +28,14 @@ public class HibernateViajesRepository extends BaseHibernateRepository implement
 	public void altaViaje(String origen, String destino, Integer conductorId, Integer costoTotal,
 			Integer cantidadPasajeros) {
 		Session session = this.getSession();
-		Transaction tx = session.beginTransaction();
 		Muber muber = (Muber) session.createQuery("from Muber").uniqueResult();
 		Query query = session.createQuery("from Conductor WHERE id_usuario = :conductorId");
 		query.setParameter("conductorId", conductorId);
 		Conductor conductor = (Conductor) query.uniqueResult();;
 		Viaje viaje = new Viaje (origen, destino, costoTotal, cantidadPasajeros, new Date(), conductor);
 		muber.addViaje(viaje);
-		tx.commit();
+		session.save("Viaje", viaje);
+		session.flush();
 		session.disconnect();
 		session.close();
 		
@@ -56,7 +55,7 @@ public class HibernateViajesRepository extends BaseHibernateRepository implement
 	@Override
 	public String addPasajero(Integer viajeId, Integer pasajeroId) {
 		Session session = this.getSession();
-		Transaction tx = session.beginTransaction();
+		
 		Query query = session.createQuery("from Viaje WHERE id = :viajeId");
 		query.setParameter("viajeId", viajeId);
 		Viaje viaje = (Viaje) query.uniqueResult();
@@ -73,7 +72,8 @@ public class HibernateViajesRepository extends BaseHibernateRepository implement
 		}else{
 			resultado = "No se pudo agregar el pasajero";
 		}
-		tx.commit();
+		session.save("Viaje", viaje);
+		session.flush();
 		session.disconnect();
 		session.close();
 		return resultado;
@@ -83,7 +83,7 @@ public class HibernateViajesRepository extends BaseHibernateRepository implement
 	@Override
 	public void calificarViaje(Integer viajeId, Integer pasajeroId, Integer puntaje, String comentario) {
 		Session session = this.getSession();
-		Transaction tx = session.beginTransaction();
+
 		Query query = session.createQuery("from Viaje WHERE id = :viajeId");
 		query.setParameter("viajeId", viajeId);
 		Viaje viaje = (Viaje) query.uniqueResult();
@@ -95,7 +95,9 @@ public class HibernateViajesRepository extends BaseHibernateRepository implement
 		// Las validaciones previas al agregar el comentario se realizaron en el service
 		Comentario c = new Comentario (puntaje, comentario, pasajero);
 		viaje.addComentario(c);
-		tx.commit();
+
+		session.save("Comentario", c);
+		session.flush(); 
 		session.disconnect();
 		session.close();
 	}

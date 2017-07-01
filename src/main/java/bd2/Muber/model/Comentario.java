@@ -48,13 +48,5 @@ public class Comentario {
 	public void setPasajero(Pasajero pasajero) {
 		this.pasajero = pasajero;
 	}
-
-	/*public Viaje getViaje() {
-		return viaje;
-	}
-
-	public void setViaje(Viaje viaje) {
-		this.viaje = viaje;
-	}*/
 	
 }
