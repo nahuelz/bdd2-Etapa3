@@ -15,7 +15,9 @@ public class HibernateConductoresRepository extends BaseHibernateRepository impl
 		Query query =session.createQuery("from Conductor WHERE id_usuario = :conductorId");
 		query.setParameter("conductorId", conductorId);
 		Conductor conductor = (Conductor) query.uniqueResult();
-		conductor.puntajePromedio();
+		if (conductor != null){
+			conductor.puntajePromedio();
+		}
 		session.disconnect();
 		session.close();
 		return conductor;
