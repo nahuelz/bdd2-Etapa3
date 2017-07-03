@@ -107,11 +107,13 @@ public class HibernateViajesRepository extends BaseHibernateRepository implement
 		Session session = this.getSession();
 	
 		// Las validaciones previas al finalizar el viaje se realizaron en el service
-		Query query2 = session.createQuery("UPDATE Viaje SET estado = :estado WHERE id = :viajeId");
-		query2.setParameter("estado", 'F');
-		query2.setParameter("viajeId", viajeId);
-		query2.executeUpdate();
-		
+		Query query = session.createQuery("from Viaje WHERE id = :viajeId");
+		query.setParameter("viajeId", viajeId);
+		Viaje viaje =  (Viaje) query.uniqueResult();
+		viaje.finalizar();
+
+		session.save("Viaje", viaje);
+		session.flush();
 		session.disconnect();
 		session.close();
 		
